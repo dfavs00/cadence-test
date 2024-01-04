@@ -1,0 +1,44 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.14'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.favata'
+version = '0.0.1'
+
+java {
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation group: 'com.uber.cadence', name: 'cadence-client', version: '+'
+	implementation group: 'commons-configuration', name: 'commons-configuration', version: '1.9'
+	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+	implementation 'org.apache.groovy:groovy-json:4.0.10'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+task listCadenceWorkflows(type: Exec) {
+	group = 'cadence'
+	commandLine 'docker', 'run', '--network=host', '--rm', 'ubercadence/cli:master', '--do', 'test-domain', 'workflow', 'list'
+}
