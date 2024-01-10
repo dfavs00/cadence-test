@@ -22,13 +22,9 @@ public class TaskActivitiesImpl implements TaskActivities {
     @Autowired
     private TaskService taskService;
 
-    @Autowired
-    private UserService userService;
-
     @Override
     public Task AssignTask(String taskId) {
-        // Assign a task to the user with the least amount of tasks
-        // Otherwise give to the lowest user
+        // Assign a task to the user with the least amount of tasks, otherwise give to the lowest user
         List<TaskUser> taskUsers = taskService.GetAllUsersTasks();
         TaskUser lowestTaskUser = taskUsers.stream().reduce((tu1, tu2) ->
                 tu1.getTasks().size() <= tu2.getTasks().size() ? tu1 : tu2).orElse(null);

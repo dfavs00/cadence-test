@@ -15,5 +15,4 @@ public interface TaskActivities {
 
     @ActivityMethod(scheduleToCloseTimeoutSeconds = 30)
     Task DeleteTask(String taskId);
-
 }

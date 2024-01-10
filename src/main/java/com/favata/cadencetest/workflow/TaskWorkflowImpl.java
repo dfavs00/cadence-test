@@ -29,21 +29,25 @@ public class TaskWorkflowImpl implements TaskWorkflow {
                     .setTaskList(WorkflowConstants.TASK_WORKFLOW_TASK_LIST)
                     .build());
 
-    private Queue<TaskAction> taskActionQueue = new LinkedList<>();
+    private final Queue<TaskAction> taskActionQueue = new LinkedList<>();
     private Task task = null;
 
     @Override
     public void create(Arguments arguments) {
         try {
+            // Verify task exists and assign task to a user
             task = activities.GetTask(arguments.getTaskId());
+            Task assignedTask = activities.AssignTask(task.getId());
+            log.info("Newly assigned task {}", assignedTask);
+
             while (task != null && !task.isCompleted()) {
                 Workflow.await(() -> !updateQueuesAreEmpty());
                 processTaskActionQueue();
             }
         } catch (WorkflowException e) {
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         } finally {
-            log.debug("Task: {} completed", arguments.getTaskId());
+            log.info("Task: {} completed", arguments.getTaskId());
         }
     }
 

@@ -1,11 +1,11 @@
 package com.favata.cadencetest.domain.task;
 
 import com.favata.cadencetest.domain.entity.Task;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskDto {
     private String id;
     private String assignedUserId;

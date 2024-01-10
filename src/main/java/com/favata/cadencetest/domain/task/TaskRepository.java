@@ -15,7 +15,7 @@ public class TaskRepository {
 
     private final TaskStorage taskStorage = new TaskStorage();
 
-    public Task CreateTask (TaskDto taskDto) {
+    public Task CreateTask(TaskDto taskDto) {
         String newId = UUID.randomUUID().toString();
         Task newTask = new Task(newId, null, taskDto.getDescription(), false);
         taskStorage.idMap.put(newId, newTask);
@@ -32,7 +32,8 @@ public class TaskRepository {
 
     public List<Task> GetTasksByUserId(String userId) {
         List<Task> tasks = GetTasks();
-        return tasks.stream().filter(task -> task.getAssignedUserId().equals(userId)).collect(Collectors.toList());
+        return tasks.stream().filter(task ->
+                task.getAssignedUserId() != null && task.getAssignedUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public Task UpdateTask(TaskDto taskDto) {
